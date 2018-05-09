@@ -29,10 +29,8 @@ namespace HotelApi.Controllers
         public IActionResult AddRegion()
         {
             _hotelsRepository.Add();
-            return Ok(message);
+            return Ok("message");
         }
-
-
 
         [HttpDelete("DeleteRegion")]
         public IActionResult Remove(int id)
@@ -46,6 +44,13 @@ namespace HotelApi.Controllers
         {
             _hotelsRepository.Reced();
             return Ok("Region Deleted");
+        }
+
+        [HttpGet, Route("Search")]
+        public IActionResult Search(HotelRegionSearcher search)
+        {
+            var answerList = _hotelsRepository.Search(search);
+            return Ok(answerList);
         }
     }
 }

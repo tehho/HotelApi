@@ -20,6 +20,9 @@ namespace HotelApi
             Name = other.Name;
         }
 
+        public HotelRegion()
+        { }
+
     }
 
    
