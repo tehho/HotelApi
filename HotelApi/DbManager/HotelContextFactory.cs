@@ -2,12 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HotelApi.DbManager
 {
-    public class HotelContextFactory : IDesignTimeDbContextFactory<CustomerContext>
+    public class HotelContextFactory : IDesignTimeDbContextFactory<HotelContext>
     {
         private static string _connectionString = null;
+
+        private static HotelContext _instance = new HotelContextFactory().CreateDbContext();
+        public static HotelContext SingleInstance => _instance;
 
         public HotelContext CreateDbContext()
         {
@@ -21,10 +25,10 @@ namespace HotelApi.DbManager
                 LoadConnectionString();
             }
 
-            var builder = new DbContextOptionsBuilder<CustomerContext>();
+            var builder = new DbContextOptionsBuilder<HotelContext>();
             builder.UseSqlServer(_connectionString);
 
-            return new CustomerContext(builder.Options);
+            return new HotelContext(builder.Options);
         }
 
         private void LoadConnectionString()
@@ -43,11 +47,6 @@ namespace HotelApi.DbManager
                     _connectionString = "Server = (localdb)\\mssqllocaldb ; Database = db_hotelapi_andreas_joakim; Trusted_Connection = true;";
                 }
 
-            }
-            else
-            {
-                //TODO Endast för oskar
-                _connectionString = "Server = (localdb)\\mssqllocaldb ; Database = db_krm; Trusted_Connection = true;";
             }
         }
     }

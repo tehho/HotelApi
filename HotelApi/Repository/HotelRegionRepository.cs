@@ -1,12 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using HotelApi.DbManager;
 
-namespace HotelApi.DbManager
+namespace HotelApi.Repository
 {
     public class HotelRegionRepository : IRepository<HotelRegion>
     {
         public HotelRegion Add(HotelRegion obj)
         {
-            throw new System.NotImplementedException();
+            HotelRegion temp = new HotelRegion(obj);
+            temp.Id = null;
+
+            using (var context = HotelContextFactory.SingleInstance)
+            {
+                context.HotelRegions.Add(temp);
+                context.SaveChanges();
+            }
+
+            return temp;
         }
 
         public HotelRegion Get(HotelRegion obj)
