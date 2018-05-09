@@ -18,36 +18,26 @@ namespace HotelApi.Controllers
             _hotelsRepository = hotelsRepository;
         }
 
-
-
-        [HttpGet, Route("DisplayAllHotels")]
-        public IActionResult DisplayAllHotels()
-        {
-            var hotels = _hotelsRepository.GetAllHotels();
-            return Ok(hotels);
-        }
-
-
         [HttpGet, Route("DisplayAllRegions")]
         public IActionResult DisplayAllRegions()
         {
-            var regions = _hotelsRepository.GetAllRegions();
+            var regions = _hotelsRepository.Get();
             return Ok(regions);
         }
 
-        [HttpPost, Route("AddRegion")]
+        [HttpPost, Route("Add")]
         public IActionResult AddRegion()
         {
-            _hotelsRepository.AddRegions();
+            _hotelsRepository.Add();
             return Ok(message);
         }
 
 
 
         [HttpDelete("DeleteRegion")]
-        public IActionResult DeleteOneRegion(int id)
+        public IActionResult Remove(int id)
         {
-            _hotelsRepository.DeleteRegion(id);
+            _hotelsRepository.Remove(id);
             return Ok("Region Deleted");
         }
 

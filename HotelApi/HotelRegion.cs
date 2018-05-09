@@ -4,6 +4,12 @@ namespace HotelApi.DbManager
 {
     public class HotelRegion
     {
+        public HotelRegion(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         [Key]
         public int Id { get; set; }
 
