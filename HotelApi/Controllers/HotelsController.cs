@@ -56,19 +56,19 @@ namespace HotelApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Remove(int? id)
+        public IActionResult Remove(HotelRegionSearcher region)
         {
-            if (id == null)
+            if (region.Id == null)
                 return BadRequest(ModelState);
 
             HotelRegion temp = null;
             try
             {
-                temp = _hotelsRepository.Remove(new HotelRegion{ Id = id});
+                temp = _hotelsRepository.Remove(region.ToHotelRegion());
             }
             catch (InvalidOperationException ioe)
             {
-                return BadRequest();
+                return NotFound(ioe.Message);
             }
             return Ok(temp);
         }
@@ -83,7 +83,7 @@ namespace HotelApi.Controllers
                 AddRegion(new HotelRegion() { Name = "Helsingborg", Id = 70 });
                 return Ok("Database reseeded");
             }
-            return Ok("Reseeding failed");
+            return BadRequest("Reseeding failed");
         }
     }
 }

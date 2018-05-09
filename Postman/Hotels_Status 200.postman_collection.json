@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "6a0dad36-617e-44cb-9f3b-731ea922c086",
-		"name": "Hotels",
+		"name": "Hotels_Status 200",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,10 +11,10 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "346fea9e-f2f4-4b1f-9016-9341e8f207c8",
+						"id": "6e8a9fff-034a-49b7-8710-bcd27a28e3b5",
 						"type": "text/javascript",
 						"exec": [
-							"pm.globals.get(\"tests\")[\"code 200\"];"
+							""
 						]
 					}
 				}
@@ -24,12 +24,13 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "localhost:30763/Hotels/ReseedDatabase",
+					"raw": "localhost:30763/api/Hotels/ReseedDatabase",
 					"host": [
 						"localhost"
 					],
 					"port": "30763",
 					"path": [
+						"api",
 						"Hotels",
 						"ReseedDatabase"
 					]
@@ -44,7 +45,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:30763/api/hotels/DisplayAllRegions",
+					"raw": "http://localhost:30763/api/hotels/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -53,7 +54,7 @@
 					"path": [
 						"api",
 						"hotels",
-						"DisplayAllRegions"
+						""
 					]
 				}
 			},
@@ -63,10 +64,25 @@
 			"name": "AddRegion Göteborg Bergsjön",
 			"request": {
 				"method": "POST",
-				"header": [],
-				"body": {},
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Göteborg Bergsjön",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "http://localhost:30763/api/hotels/addRegion?name=Göteborg Bergsjön",
+					"raw": "http://localhost:30763/api/hotels/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -75,13 +91,28 @@
 					"path": [
 						"api",
 						"hotels",
-						"addRegion"
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Id 50",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:30763/api/Hotels/50",
+					"host": [
+						"localhost"
 					],
-					"query": [
-						{
-							"key": "name",
-							"value": "Göteborg Bergsjön"
-						}
+					"port": "30763",
+					"path": [
+						"api",
+						"Hotels",
+						"50"
 					]
 				}
 			},
