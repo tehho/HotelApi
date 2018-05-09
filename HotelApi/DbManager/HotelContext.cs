@@ -9,6 +9,8 @@ namespace HotelApi.DbManager
 {
     public class HotelContext : DbContext
     {
+        public static HotelContext Instance { get; } = new HotelContextFactory().CreateDbContext();
+
         public HotelContext(DbContextOptions<HotelContext> options) : base(options)
         {
 

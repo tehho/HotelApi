@@ -10,5 +10,7 @@ namespace HotelApi.DbManager
         T Remove(T obj);
         List<T> GetAll();
         List<T> Search(T obj);
+
+        bool Reseed();
     }
 }

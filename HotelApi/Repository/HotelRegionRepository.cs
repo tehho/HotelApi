@@ -1,48 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HotelApi.DbManager;
+using Microsoft.Azure.KeyVault.Models;
 
 namespace HotelApi.Repository
 {
     public class HotelRegionRepository : IRepository<HotelRegion>
     {
+        private HotelContext context = new HotelContextFactory().CreateDbContext();
+
         public HotelRegion Add(HotelRegion obj)
         {
             HotelRegion temp = new HotelRegion(obj);
             temp.Id = null;
 
-            using (var context = HotelContextFactory.SingleInstance)
-            {
-                context.HotelRegions.Add(temp);
-                context.SaveChanges();
-            }
+            context.HotelRegions.Add(temp);
+            context.SaveChanges();
 
             return temp;
         }
 
         public HotelRegion Get(HotelRegion obj)
         {
-            throw new System.NotImplementedException();
+            var temp = new HotelRegion(obj);
+            try
+            {
+                if (temp.Id != null)
+                {
+                    return SearchSingle(region => region.Id == temp.Id);
+                }
+
+                if (temp.Name != null)
+                {
+                    return SearchSingle(region => region.Name == temp.Name);
+                }
+            }
+            catch (InvalidOperationException ioe)
+            {
+                throw new InvalidOperationException("Failed to search for one element", ioe);
+            }
+
+            return temp;
         }
 
         public HotelRegion Update(HotelRegion obj)
         {
-            throw new System.NotImplementedException();
+            if (obj.Id == null)
+                throw new ArgumentNullException("Update -> HotelRegion", "Id of Region was set to null");
+
+            var temp = Get(obj);
+
+            if (obj.Name != null)
+                temp.Name = obj.Name;
+
+            context.SaveChanges();
+
+            return temp;
         }
 
         public HotelRegion Remove(HotelRegion obj)
         {
-            throw new System.NotImplementedException();
+            var temp = Get(obj);
+
+            context.HotelRegions.Remove(temp);
+            context.SaveChanges();
+
+
+            return temp;
         }
 
         public List<HotelRegion> GetAll()
         {
-            throw new System.NotImplementedException();
+            List<HotelRegion> list = null;
+
+            list = context.HotelRegions.ToList();
+
+            return list;
         }
 
         public List<HotelRegion> Search(HotelRegion obj)
         {
-            throw new System.NotImplementedException();
+            if (obj.Id != null)
+            {
+                return SearchList(region => region.Id == obj.Id).ToList();
+            }
+
+            if (obj.Name != null)
+            {
+                return SearchList(reigon => reigon.Name.Contains(obj.Name)).ToList();
+            }
+
+            return GetAll();
         }
+
+        public bool Reseed()
+        {
+            try
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        private HotelRegion SearchSingle(Func<HotelRegion, bool> method)
+        {
+            return context.HotelRegions.Single(method);
+        }
+
+        private IEnumerable<HotelRegion> SearchList(Func<HotelRegion, bool> method)
+        {
+            return context.HotelRegions.Where(method);
+        }
+
     }
 }

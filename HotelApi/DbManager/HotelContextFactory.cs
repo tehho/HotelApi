@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -10,8 +11,6 @@ namespace HotelApi.DbManager
     {
         private static string _connectionString = null;
 
-        private static HotelContext _instance = new HotelContextFactory().CreateDbContext();
-        public static HotelContext SingleInstance => _instance;
 
         public HotelContext CreateDbContext()
         {
@@ -35,18 +34,21 @@ namespace HotelApi.DbManager
         {
             if (File.Exists("appsettings.json"))
             {
-                var builder = new ConfigurationBuilder();
-                builder.AddJsonFile("appsettings.json", optional: false);
+                try
+                {
 
-                var configuration = builder.Build();
+                    var builder = new ConfigurationBuilder();
+                    builder.AddJsonFile("appsettings.json", optional: false);
 
-                _connectionString = configuration.GetConnectionString("DefaultConnection");
+                    var configuration = builder.Build();
 
-                if (string.IsNullOrEmpty(_connectionString))
+                    _connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                }
+                catch (Exception e)
                 {
                     _connectionString = "Server = (localdb)\\mssqllocaldb ; Database = db_hotelapi_andreas_joakim; Trusted_Connection = true;";
                 }
-
             }
         }
     }
