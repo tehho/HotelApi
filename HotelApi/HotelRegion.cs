@@ -23,6 +23,11 @@ namespace HotelApi
         public HotelRegion()
         { }
 
+        public HotelRegion(string name)
+        {
+            Name = name;
+        }
+
     }
 
    
