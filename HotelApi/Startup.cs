@@ -34,6 +34,8 @@ namespace HotelApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+            app.UseDirectoryBrowser();
             app.UseMvc();
         }
     }
