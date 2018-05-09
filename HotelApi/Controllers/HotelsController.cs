@@ -28,7 +28,7 @@ namespace HotelApi.Controllers
         [HttpPost, Route("AddRegion")]
         public IActionResult AddRegion(HotelRegion region)
         {
-            var returnRegion = _hotelsRepository.Add(region);
+            var returnRegion = _hotelsRepository.AddRegion(region);
             return Ok(returnRegion);
         }
 
