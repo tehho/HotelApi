@@ -4,7 +4,7 @@ namespace HotelApi.DbManager
 {
     public interface IRepository<T>
     {
-        T AddRegion(T obj);
+        T Add(T obj);
         T Get(T obj);
         T Update(T obj);
         T Remove(T obj);

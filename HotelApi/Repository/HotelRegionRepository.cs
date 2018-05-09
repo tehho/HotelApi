@@ -11,7 +11,7 @@ namespace HotelApi.Repository
     {
         private HotelContext context = new HotelContextFactory().CreateDbContext();
 
-        public HotelRegion AddRegion(HotelRegion obj)
+        public HotelRegion Add(HotelRegion obj)
         {
             HotelRegion temp = new HotelRegion(obj);
 

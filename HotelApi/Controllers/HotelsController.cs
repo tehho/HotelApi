@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HotelApi.Controllers
 {
-    [Route("api/hotels")]
+    [Route("api/[controller]")]
     public class HotelsController : Controller
     {
         private readonly IRepository<HotelRegion> _hotelsRepository;
@@ -18,27 +18,53 @@ namespace HotelApi.Controllers
             _hotelsRepository = hotelsRepository;
         }
 
-        [HttpGet, Route("DisplayAllRegions")]
+        [HttpGet]
         public IActionResult DisplayAllRegions()
         {
             var regions = _hotelsRepository.GetAll();
             return Ok(regions);
         }
 
-        [HttpPost, Route("AddRegion")]
-        public IActionResult AddRegion(HotelRegion region)
+        [HttpGet("{Id}")]
+        public IActionResult DisplayRegion(HotelRegionSearcher region)
         {
-            var returnRegion = _hotelsRepository.AddRegion(region);
+            if (region.Id == null)
+                return BadRequest("No ID Given for DisplayRegion");
+
+            HotelRegion returnRegion;
+            try
+            {
+                returnRegion = _hotelsRepository.Get(region.ToHotelRegion());
+
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return NotFound(ioe.Message);
+            }
+
             return Ok(returnRegion);
         }
 
-        [HttpDelete("DeleteRegion")]
-        public IActionResult Remove(HotelRegion region)
+        [HttpPost]
+        public IActionResult AddRegion(HotelRegion region)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var returnRegion = _hotelsRepository.Add(region);
+            return Ok(returnRegion);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Remove(int? id)
+        {
+            if (id == null)
+                return BadRequest(ModelState);
+
             HotelRegion temp = null;
             try
             {
-                temp = _hotelsRepository.Remove(region);
+                temp = _hotelsRepository.Remove(new HotelRegion{ Id = id});
             }
             catch (InvalidOperationException ioe)
             {
