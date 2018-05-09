@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "6a0dad36-617e-44cb-9f3b-731ea922c086",
+		"name": "Hotels",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ReseedDatabase",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "346fea9e-f2f4-4b1f-9016-9341e8f207c8",
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.get(\"tests\")[\"code 200\"];"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:30763/Hotels/ReseedDatabase",
+					"host": [
+						"localhost"
+					],
+					"port": "30763",
+					"path": [
+						"Hotels",
+						"ReseedDatabase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DisplayAllRegions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:30763/api/hotels/DisplayAllRegions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "30763",
+					"path": [
+						"api",
+						"hotels",
+						"DisplayAllRegions"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0776620b-ff0c-450a-bab8-c106573f1b45",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "cb8d2130-8472-426c-aff7-c5110a35d95b",
+				"type": "text/javascript",
+				"exec": [
+					"tests[\"Status code 200\"] = responseCode.code === 200;"
+				]
+			}
+		}
+	]
+}
