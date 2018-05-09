@@ -44,7 +44,7 @@ namespace HotelApi.Controllers
         [HttpDelete("RecedDatabase")]
         public IActionResult RecedDatabase()
         {
-            _hotelsRepository.RecedDatabase();
+            _hotelsRepository.Reced();
             return Ok("Region Deleted");
         }
     }
