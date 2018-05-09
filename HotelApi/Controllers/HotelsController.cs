@@ -47,11 +47,12 @@ namespace HotelApi.Controllers
             return Ok(temp);
         }
 
-        [HttpDelete("RecedDatabase")]
-        public IActionResult RecedDatabase()
+        [HttpDelete("ReseedDatabase")]
+        public IActionResult ReseedDatabase()
         {
-            _hotelsRepository.ReseedDatabase();
-            return Ok("Region Deleted");
+            if (_hotelsRepository.Reseed())
+                return Ok("Database reseeded");
+            return Ok("Reseeding failed");
         }
     }
 }
