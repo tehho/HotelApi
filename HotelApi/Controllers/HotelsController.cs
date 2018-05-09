@@ -11,9 +11,9 @@ namespace HotelApi.Controllers
     [Route("api/hotels")]
     public class HotelsController : Controller
     {
-        private readonly IRepository<> _hotelsRepository;
+        private readonly IRepository<HotelRegion> _hotelsRepository;
 
-        public HotelsController(IRepository<> hotelsRepository)
+        public HotelsController(IRepository<HotelRegion> hotelsRepository)
         {
             _hotelsRepository = hotelsRepository;
         }
@@ -21,30 +21,36 @@ namespace HotelApi.Controllers
         [HttpGet, Route("DisplayAllRegions")]
         public IActionResult DisplayAllRegions()
         {
-            var regions = _hotelsRepository.Get();
+            var regions = _hotelsRepository.GetAll();
             return Ok(regions);
         }
 
         [HttpPost, Route("Add")]
-        public IActionResult AddRegion()
+        public IActionResult AddRegion(HotelRegion region)
         {
-            _hotelsRepository.Add();
-            return Ok(message);
+            var returnRegion = _hotelsRepository.Add(region);
+            return Ok(returnRegion);
         }
 
-
-
         [HttpDelete("DeleteRegion")]
-        public IActionResult Remove(int id)
+        public IActionResult Remove(HotelRegion region)
         {
-            _hotelsRepository.Remove(id);
-            return Ok("Region Deleted");
+            HotelRegion temp = null;
+            try
+            {
+                temp = _hotelsRepository.Remove(region);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return BadRequest();
+            }
+            return Ok(temp);
         }
 
         [HttpDelete("RecedDatabase")]
         public IActionResult RecedDatabase()
         {
-            _hotelsRepository.RecedDatabase();
+            _hotelsRepository.ReseedDatabase();
             return Ok("Region Deleted");
         }
     }
