@@ -11,11 +11,11 @@ namespace HotelApi.DbManager
     {
         public static HotelContext Instance { get; } = new HotelContextFactory().CreateDbContext();
 
+        public DbSet<HotelRegion> HotelRegions { get; set; }
+
         public HotelContext(DbContextOptions<HotelContext> options) : base(options)
         {
 
         }
-
-        public DbSet<HotelRegion> HotelRegions { get; set; }
     }
 }

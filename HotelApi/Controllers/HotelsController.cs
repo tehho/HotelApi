@@ -52,9 +52,9 @@ namespace HotelApi.Controllers
         {
             if (_hotelsRepository.Reseed())
             {
-                AddRegion(new HotelRegion() { Name = "Göteborg Centrum" });
-                AddRegion(new HotelRegion() { Name = "Göteborg Hisingen" });
-                AddRegion(new HotelRegion() { Name = "Helsingborg" });
+                AddRegion(new HotelRegion() { Name = "Göteborg Centrum", Id = 50 });
+                AddRegion(new HotelRegion() { Name = "Göteborg Hisingen", Id = 60 });
+                AddRegion(new HotelRegion() { Name = "Helsingborg", Id = 70 });
                 return Ok("Database reseeded");
             }
             return Ok("Reseeding failed");

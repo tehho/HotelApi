@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HotelApi.DbManager;
 using Microsoft.Azure.KeyVault.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelApi.Repository
 {
@@ -13,10 +14,30 @@ namespace HotelApi.Repository
         public HotelRegion Add(HotelRegion obj)
         {
             HotelRegion temp = new HotelRegion(obj);
-            temp.Id = null;
 
-            context.HotelRegions.Add(temp);
-            context.SaveChanges();
+            if (obj.Id != null)
+            {
+                //TODO: Lägg till update när id finns i db redan
+                context.Database.OpenConnection();
+                try
+                {
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.HotelRegions ON");
+
+                    context.HotelRegions.Add(temp);
+                    context.SaveChanges();
+
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.HotelRegions OFF");
+                }
+                finally
+                {
+                    context.Database.CloseConnection();
+                }
+            }
+            else
+            {
+                context.HotelRegions.Add(temp);
+                context.SaveChanges();
+            }
 
             return temp;
         }
