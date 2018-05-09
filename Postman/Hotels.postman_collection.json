@@ -58,6 +58,34 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "AddRegion Göteborg Bergsjön",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:30763/api/hotels/addRegion?name=Göteborg Bergsjön",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "30763",
+					"path": [
+						"api",
+						"hotels",
+						"addRegion"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Göteborg Bergsjön"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
