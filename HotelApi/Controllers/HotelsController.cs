@@ -39,13 +39,20 @@ namespace HotelApi.Controllers
             {
                 var list = System.IO.File.ReadAllLines(loadFile).ToList();
 
+                regions.ForEach(r => r.Hotels = new List<Hotel>());
+
                 list.ForEach(line =>
                 {
                     try
                     {
                         var hotel = new ScandicHotelParser().Parse(line);
+                        var region = regions.Single(r => r.Id == hotel.HotelRegionId);
 
-                        regions.Single(region => region.Id == hotel.Id).Hotels.Add(hotel);
+                        region.Hotels.Add(hotel);
+                    }
+                    catch (InvalidOperationException ioe)
+                    {
+                        //TODO Logga att regionen inte fanns
                     }
                     catch (ArgumentException e)
                     {
@@ -108,7 +115,7 @@ namespace HotelApi.Controllers
 
             return Ok(returnRegion);
         }
-        
+
         [HttpPost]
         public IActionResult AddRegion(HotelRegion region)
         {

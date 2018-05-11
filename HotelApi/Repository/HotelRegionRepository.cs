@@ -119,7 +119,8 @@ namespace HotelApi.Repository
         {
             try
             {
-                context.RemoveRange(context.HotelRegions);
+                var list = context.HotelRegions.ToList();
+                context.RemoveRange(list);
                 return true;
             }
             catch (Exception e)
