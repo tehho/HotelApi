@@ -1,0 +1,4 @@
+50,Scandic Rubinen,10
+50,Scandic Opalen,15
+60,Scandic Backadal,15
+70,Scandic Helsingborg North,2
