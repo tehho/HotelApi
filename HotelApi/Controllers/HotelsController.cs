@@ -44,7 +44,7 @@ namespace HotelApi.Controllers
 
             return Ok(returnRegion);
         }
-
+        
         [HttpPost]
         public IActionResult AddRegion(HotelRegion region)
         {

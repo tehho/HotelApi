@@ -119,8 +119,7 @@ namespace HotelApi.Repository
         {
             try
             {
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
+                context.RemoveRange(context.HotelRegions);
                 return true;
             }
             catch (Exception e)
@@ -131,12 +130,12 @@ namespace HotelApi.Repository
 
         private HotelRegion SearchSingle(Func<HotelRegion, bool> method)
         {
-            return context.HotelRegions.Single(method);
+            return context.HotelRegions.Include(hotelRegion => hotelRegion.Hotels).Single(method);
         }
 
         private IEnumerable<HotelRegion> SearchList(Func<HotelRegion, bool> method)
         {
-            return context.HotelRegions.Where(method);
+            return context.HotelRegions.Include(hotelRegion => hotelRegion.Hotels).Where(method);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelApi
 {
@@ -11,6 +12,8 @@ namespace HotelApi
         [Required(ErrorMessage = "A region needs a name")]
         public string Name { get; set; }
 
+        public List<Hotel> Hotels { get; set; }
+
         public HotelRegion()
         {
 
@@ -20,17 +23,20 @@ namespace HotelApi
         {
             Id = other.Id;
             Name = other.Name;
+            Hotels = other.Hotels;
         }
         
         public HotelRegion(string name)
         {
             Name = name;
+            Hotels = new List<Hotel>();
             Id = null;
         }
-        public HotelRegion(int id, string name)
+        public HotelRegion(int id, string name, List<Hotel> hotels)
         {
             Id = id;
             Name = name;
+            Hotels = hotels;
         }
 
     }
