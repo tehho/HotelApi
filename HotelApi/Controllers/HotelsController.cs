@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HotelApi.DbManager;
+using HotelApi.Parser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -22,7 +25,68 @@ namespace HotelApi.Controllers
         public IActionResult DisplayAllRegions()
         {
             var regions = _hotelsRepository.GetAll();
+
+            regions = FillRegionsWithHotels(regions);
+
             return Ok(regions);
+        }
+
+        private List<HotelRegion> FillRegionsWithHotels(List<HotelRegion> regions)
+        {
+            string loadFile = GetLastScandicFreeRooms();
+
+            if (loadFile != "")
+            {
+                var list = System.IO.File.ReadAllLines(loadFile).ToList();
+
+                list.ForEach(line =>
+                {
+                    try
+                    {
+                        var hotel = new ScandicHotelParser().Parse(line);
+
+                        regions.Single(region => region.Id == hotel.Id).Hotels.Add(hotel);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        //TODO Logga att det var fel att läsa Scandic filen
+                    }
+
+
+                });
+            }
+
+            return regions;
+        }
+
+        private static string GetLastScandicFreeRooms()
+        {
+            var files = Directory.GetFiles("../Scandic/").ToList();
+            var regex = new Regex(@"Scandic-(\d\d\d\d)-(\d\d)-(\d\d)\.txt$");
+
+            DateTime now = DateTime.MinValue;
+            var loadFile = "";
+
+            foreach (var file in files)
+            {
+                if (regex.IsMatch(file))
+                {
+                    var matches = regex.Match(file);
+                    var year = int.Parse(matches.Groups[1].Value);
+                    var month = int.Parse(matches.Groups[2].Value);
+                    var day = int.Parse(matches.Groups[3].Value);
+
+                    var test = new DateTime(year, month, day);
+
+                    if (test > now)
+                    {
+                        now = test;
+                        loadFile = file;
+                    }
+                }
+            }
+
+            return loadFile;
         }
 
         [HttpGet("{Id}")]
