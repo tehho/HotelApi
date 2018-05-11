@@ -31,7 +31,7 @@ namespace HotelApi.Parser
 
                 return new Hotel()
                 {
-                    Id = int.Parse(list[0]),
+                    HotelRegionId = int.Parse(list[0]),
                     Name = list[1],
                     RoomsAvaiable = int.Parse(list[2])
                 };
