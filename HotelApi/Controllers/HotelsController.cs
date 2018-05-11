@@ -61,7 +61,7 @@ namespace HotelApi.Controllers
 
         private static string GetLastScandicFreeRooms()
         {
-            var files = Directory.GetFiles("../Scandic/").ToList();
+            var files = Directory.GetFiles("Scandic/").ToList();
             var regex = new Regex(@"Scandic-(\d\d\d\d)-(\d\d)-(\d\d)\.txt$");
 
             DateTime now = DateTime.MinValue;
