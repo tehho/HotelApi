@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace HotelApi
+namespace Hotel.Domain
 {
     public class HotelRegion
     {

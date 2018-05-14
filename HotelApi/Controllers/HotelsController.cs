@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Hotel.Domain;
 using HotelApi.DbManager;
 using HotelApi.Parser;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace HotelApi.Controllers
                 {
                     var list = System.IO.File.ReadAllLines(loadFile).ToList();
 
-                    regions.ForEach(r => r.Hotels = new List<Hotel>());
+                    regions.ForEach(r => r.Hotels = new List<Hotel.Domain.Hotel>());
 
                     list.ForEach(line =>
                     {

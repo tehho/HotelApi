@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hotel.Domain;
 using HotelApi.DbManager;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.EntityFrameworkCore;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hotel.Domain;
 using HotelApi.DbManager;
 using HotelApi.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +28,8 @@ namespace HotelApi
         {
             services.AddSingleton<IRepository<HotelRegion>, HotelRegionRepository>();
             services.AddMvc();
+            var appConfigurations = Configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
+            services.AddSingleton(appConfigurations);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
