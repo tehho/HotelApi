@@ -69,7 +69,7 @@ namespace HotelApi.Controllers
         private static string GetLastScandicFreeRooms()
         {
             var files = Directory.GetFiles("Scandic/").ToList();
-            var regex = new Regex(@"Scandic-^(\d{4})-(\d{2})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
+            var regex = new Regex(@"Scandic-^(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
 
             DateTime now = DateTime.MinValue;
             var loadFile = "";
