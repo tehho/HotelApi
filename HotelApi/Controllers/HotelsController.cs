@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Hotel.Domain;
 using HotelApi.DbManager;
 using HotelApi.Parser;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HotelApi.Controllers
 {
@@ -16,10 +15,12 @@ namespace HotelApi.Controllers
     public class HotelsController : Controller
     {
         private readonly IRepository<HotelRegion> _hotelsRepository;
+        private readonly AppConfiguration _appConfiguration;
 
-        public HotelsController(IRepository<HotelRegion> hotelsRepository)
+        public HotelsController(IRepository<HotelRegion> hotelsRepository, AppConfiguration appConfiguration)
         {
             _hotelsRepository = hotelsRepository;
+            _appConfiguration = appConfiguration;
         }
 
         [HttpGet]
@@ -34,15 +35,63 @@ namespace HotelApi.Controllers
 
         private List<HotelRegion> FillRegionsWithHotels(List<HotelRegion> regions)
         {
+            regions.ForEach(r => r.Hotels = new List<Hotel.Domain.Hotel>());
+
+            regions = FillRegionsWithScandicHotels(regions);
+
+            regions = FillRegionsWithBestWesternHotels(regions);
+
+            return regions;
+        }
+
+        private List<HotelRegion> FillRegionsWithBestWesternHotels(List<HotelRegion> regions)
+        {
             try
             {
-                string loadFile = GetLastScandicFreeRooms();
+                var loadFile = GetLastBestWesternFreeRooms();
+
+                if (loadFile != "")
+                {
+                    var list = new List<Hotel.Domain.Hotel>();
+                    list.ForEach(hotel =>
+                    {
+                        try
+                        {
+                            var region = regions.Single(r => r.Id == hotel.HotelRegionId);
+
+                            region.Hotels.Add(hotel);
+                        }
+                        catch (InvalidOperationException ioe)
+                        {
+                            //TODO Logga att regionen inte fanns
+                        }
+                        catch (ArgumentException e)
+                        {
+                            //TODO Logga att det var fel att läsa Scandic filen
+                        }
+
+
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return regions;
+        }
+
+        private List<HotelRegion> FillRegionsWithScandicHotels(List<HotelRegion> regions)
+        {
+            try
+            {
+                var loadFile = GetLastScandicFreeRooms();
 
                 if (loadFile != "")
                 {
                     var list = System.IO.File.ReadAllLines(loadFile).ToList();
 
-                    regions.ForEach(r => r.Hotels = new List<Hotel.Domain.Hotel>());
 
                     list.ForEach(line =>
                     {
@@ -65,21 +114,49 @@ namespace HotelApi.Controllers
 
                     });
                 }
-
-              
-
             }
             catch (Exception e)
             {
-               
+
             }
+
             return regions;
         }
 
-        private static string GetLastScandicFreeRooms()
+        private string GetLastScandicFreeRooms()
         {
-            var files = Directory.GetFiles("Scandic/").ToList();
+            var files = Directory.GetFiles(_appConfiguration.ScandicHotels).ToList();
             var regex = new Regex(@"Scandic-^(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
+
+            DateTime now = DateTime.MinValue;
+            var loadFile = "";
+
+            foreach (var file in files)
+            {
+                if (regex.IsMatch(file))
+                {
+                    var matches = regex.Match(file);
+                    var year = int.Parse(matches.Groups[1].Value);
+                    var month = int.Parse(matches.Groups[2].Value);
+                    var day = int.Parse(matches.Groups[3].Value);
+
+                     var test = new DateTime(year, month, day);
+                     
+
+                    if (test > now)
+                    {
+                        now = test;
+                        loadFile = file;
+                    }
+                }
+            }
+
+            return loadFile;
+        }
+        private string GetLastBestWesternFreeRooms()
+        {
+            var files = Directory.GetFiles(_appConfiguration.ScandicHotels).ToList();
+            var regex = new Regex(@"BestWestern-^(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
 
             DateTime now = DateTime.MinValue;
             var loadFile = "";
