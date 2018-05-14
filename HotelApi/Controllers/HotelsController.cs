@@ -69,7 +69,7 @@ namespace HotelApi.Controllers
         private static string GetLastScandicFreeRooms()
         {
             var files = Directory.GetFiles("Scandic/").ToList();
-            var regex = new Regex(@"Scandic-(\d\d\d\d)-(\d\d)-(\d\d)\.txt$");
+            var regex = new Regex(@"Scandic-^(\d{4})-(\d{2})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
 
             DateTime now = DateTime.MinValue;
             var loadFile = "";
@@ -83,7 +83,8 @@ namespace HotelApi.Controllers
                     var month = int.Parse(matches.Groups[2].Value);
                     var day = int.Parse(matches.Groups[3].Value);
 
-                    var test = new DateTime(year, month, day);
+                     var test = new DateTime(year, month, day);
+                     
 
                     if (test > now)
                     {
