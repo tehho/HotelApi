@@ -8,6 +8,9 @@ using Hotel.Domain;
 using HotelApi.DbManager;
 using HotelApi.Parser;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Hotel = Hotel.Domain.Hotel;
 
 namespace HotelApi.Controllers
 {
@@ -35,7 +38,7 @@ namespace HotelApi.Controllers
 
         private List<HotelRegion> FillRegionsWithHotels(List<HotelRegion> regions)
         {
-            regions.ForEach(r => r.Hotels = new List<Hotel.Domain.Hotel>());
+            regions.ForEach(r => r.Hotels = new List<global::Hotel.Domain.Hotel>());
 
             regions = FillRegionsWithScandicHotels(regions);
 
@@ -52,7 +55,16 @@ namespace HotelApi.Controllers
 
                 if (loadFile != "")
                 {
-                    var list = new List<Hotel.Domain.Hotel>();
+
+                    var fileContent = System.IO.File.ReadAllText(loadFile);
+
+                    var list = JArray.Parse(fileContent).ToObject<List<global::Hotel.Domain.Hotel>>();
+
+                    foreach (var hotel in list)
+                    {
+
+                    }
+
                     list.ForEach(hotel =>
                     {
                         try
@@ -65,18 +77,12 @@ namespace HotelApi.Controllers
                         {
                             //TODO Logga att regionen inte fanns
                         }
-                        catch (ArgumentException e)
-                        {
-                            //TODO Logga att det var fel att läsa Scandic filen
-                        }
-
-
                     });
                 }
             }
             catch (Exception e)
             {
-
+                //TODO Logga att det var fel att läsa Scandic filen
             }
 
             return regions;
@@ -126,7 +132,7 @@ namespace HotelApi.Controllers
         private string GetLastScandicFreeRooms()
         {
             var files = Directory.GetFiles(_appConfiguration.ScandicHotels).ToList();
-            var regex = new Regex(@"Scandic-^(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
+            var regex = new Regex(@"Scandic-(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
 
             DateTime now = DateTime.MinValue;
             var loadFile = "";
@@ -140,8 +146,8 @@ namespace HotelApi.Controllers
                     var month = int.Parse(matches.Groups[2].Value);
                     var day = int.Parse(matches.Groups[3].Value);
 
-                     var test = new DateTime(year, month, day);
-                     
+                    var test = new DateTime(year, month, day);
+
 
                     if (test > now)
                     {
@@ -156,7 +162,7 @@ namespace HotelApi.Controllers
         private string GetLastBestWesternFreeRooms()
         {
             var files = Directory.GetFiles(_appConfiguration.ScandicHotels).ToList();
-            var regex = new Regex(@"BestWestern-^(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
+            var regex = new Regex(@"BestWestern-(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.json$");
 
             DateTime now = DateTime.MinValue;
             var loadFile = "";
@@ -170,8 +176,8 @@ namespace HotelApi.Controllers
                     var month = int.Parse(matches.Groups[2].Value);
                     var day = int.Parse(matches.Groups[3].Value);
 
-                     var test = new DateTime(year, month, day);
-                     
+                    var test = new DateTime(year, month, day);
+
 
                     if (test > now)
                     {

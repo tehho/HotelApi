@@ -8,7 +8,8 @@ namespace HotelApi
 {
     public class HotelRepository : IRepository<Hotel.Domain.Hotel>
     {
-        private HotelContext context = new HotelContextFactory().CreateDbContext();
+        private HotelContext _context = new HotelContextFactory().CreateDbContext();
+
         public Hotel.Domain.Hotel Add(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();
