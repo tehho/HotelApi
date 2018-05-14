@@ -33,36 +33,45 @@ namespace HotelApi.Controllers
 
         private List<HotelRegion> FillRegionsWithHotels(List<HotelRegion> regions)
         {
-            string loadFile = GetLastScandicFreeRooms();
-
-            if (loadFile != "")
+            try
             {
-                var list = System.IO.File.ReadAllLines(loadFile).ToList();
+                string loadFile = GetLastScandicFreeRooms();
 
-                regions.ForEach(r => r.Hotels = new List<Hotel>());
-
-                list.ForEach(line =>
+                if (loadFile != "")
                 {
-                    try
-                    {
-                        var hotel = new ScandicHotelParser().Parse(line);
-                        var region = regions.Single(r => r.Id == hotel.HotelRegionId);
+                    var list = System.IO.File.ReadAllLines(loadFile).ToList();
 
-                        region.Hotels.Add(hotel);
-                    }
-                    catch (InvalidOperationException ioe)
+                    regions.ForEach(r => r.Hotels = new List<Hotel>());
+
+                    list.ForEach(line =>
                     {
-                        //TODO Logga att regionen inte fanns
-                    }
-                    catch (ArgumentException e)
-                    {
-                        //TODO Logga att det var fel att läsa Scandic filen
-                    }
+                        try
+                        {
+                            var hotel = new ScandicHotelParser().Parse(line);
+                            var region = regions.Single(r => r.Id == hotel.HotelRegionId);
+
+                            region.Hotels.Add(hotel);
+                        }
+                        catch (InvalidOperationException ioe)
+                        {
+                            //TODO Logga att regionen inte fanns
+                        }
+                        catch (ArgumentException e)
+                        {
+                            //TODO Logga att det var fel att läsa Scandic filen
+                        }
 
 
-                });
+                    });
+                }
+
+              
+
             }
-
+            catch (Exception e)
+            {
+               
+            }
             return regions;
         }
 
