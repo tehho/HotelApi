@@ -9,8 +9,6 @@ namespace Hotel.App
         static void Main(string[] args)
         {
 
-           
-
             var hotels= new List<Domain.Hotel>();
             hotels.Add(new Domain.Hotel
             { 
@@ -32,10 +30,29 @@ namespace Hotel.App
                 Name = "Scandic Helsingborg North",
                 HotelRegionId = 70,
             });
-            var scandisRoomGenerator= new FreeRoomGenerator("../../../Scandic");
-
+            var scandisRoomGenerator= new FreeRoomGenerator("../../../../HotelApi/wwwroot/Scandic");
+            
             var hotelLista=scandisRoomGenerator.GetListOfFreeRooms(hotels);
             scandisRoomGenerator.CreateFreeRoomFile(hotelLista);
+
+            hotels = new List<Domain.Hotel>();
+            hotels.Add(new Domain.Hotel
+            {
+                Name = "Hotel Eggers",
+                HotelRegionId = 50,
+            });
+            hotels.Add(new Domain.Hotel
+            {
+                Name = "Tidholms Hotel",
+                HotelRegionId = 50,
+            });
+            hotels.Add(new Domain.Hotel
+            {
+                Name = "Hotel Duxiana",
+                HotelRegionId = 70,
+            });
+           
+            scandisRoomGenerator.CreateFreeRoomFileJson(hotels);
 
         }
     }
