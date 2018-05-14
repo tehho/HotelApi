@@ -6,35 +6,35 @@ using HotelApi.DbManager;
 
 namespace HotelApi
 {
-    public class HotelRepository : IRepository<Hotel>
+    public class HotelRepository : IRepository<Hotel.Domain.Hotel>
     {
         private HotelContext context = new HotelContextFactory().CreateDbContext();
-        public Hotel Add(Hotel obj)
+        public Hotel.Domain.Hotel Add(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();
         }
 
-        public Hotel Get(Hotel obj)
+        public Hotel.Domain.Hotel Get(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();
         }
 
-        public Hotel Update(Hotel obj)
+        public Hotel.Domain.Hotel Update(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();
         }
 
-        public Hotel Remove(Hotel obj)
+        public Hotel.Domain.Hotel Remove(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();
         }
 
-        public List<Hotel> GetAll()
+        public List<Hotel.Domain.Hotel> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public List<Hotel> Search(Hotel obj)
+        public List<Hotel.Domain.Hotel> Search(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();
         }

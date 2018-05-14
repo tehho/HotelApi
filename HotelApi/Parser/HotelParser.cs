@@ -8,12 +8,12 @@ namespace HotelApi.Parser
 {
     public interface IHotelParser
     {
-        Hotel Parse(params string[] value);
+        Hotel.Domain.Hotel Parse(params string[] value);
     }
 
     public class ScandicHotelParser : IHotelParser
     {
-        public Hotel Parse(params string[] value)
+        public Hotel.Domain.Hotel Parse(params string[] value)
         {
             if (value.Length == 1)
             {
@@ -29,7 +29,7 @@ namespace HotelApi.Parser
             {
                 var list = value.Select(s => s.Trim()).ToList();
 
-                return new Hotel()
+                return new Hotel.Domain.Hotel()
                 {
                     HotelRegionId = int.Parse(list[0]),
                     Name = list[1],
