@@ -1,0 +1,1 @@
+[{"Id":null,"Name":"Hotel Eggers","RoomsAvaiable":18,"HotelRegionId":50,"Region":null},{"Id":null,"Name":"Tidholms Hotel","RoomsAvaiable":3,"HotelRegionId":50,"Region":null},{"Id":null,"Name":"Hotel Duxiana","RoomsAvaiable":24,"HotelRegionId":70,"Region":null}]

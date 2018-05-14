@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Hotel.Domain
 {
@@ -12,7 +13,7 @@ namespace Hotel.Domain
         {
             _path = path;
         }
-        public  List<string> GetListOfFreeRooms(List<Hotel> hotels)
+        public List<string> GetListOfFreeRooms(List<Hotel> hotels)
         {
             var randomRoom = new Random();
             var listaHotel = new List<string>();
@@ -36,8 +37,32 @@ namespace Hotel.Domain
 
             }
         }
+        public void CreateFreeRoomFileJson(List<Hotel> hotels)
+        {
+            var randomRoom = new Random();
+            List<Hotel> _data = new List<Hotel>();
+
+            foreach (var hotel in hotels)
+            {
+                var randomFreeRoom = randomRoom.Next(0, 25);
+                _data.Add(new Hotel()
+                {
+                    HotelRegionId = hotel.HotelRegionId,
+                    Name = hotel.Name,
+                    RoomsAvaiable = randomFreeRoom
+                });
+            }
+            
+
+            string json = JsonConvert.SerializeObject(_data.ToArray());
+
+           
+            System.IO.File.WriteAllText($"{_path}/BestWestern-{DateTime.Now:yyyy-MM-dd}.json", json);
+
+
+        }
 
     }
-    
-   
+
+
 }
