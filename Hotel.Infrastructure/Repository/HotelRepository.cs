@@ -8,7 +8,12 @@ namespace Hotel.Infrastructure.Repository
 {
     public class HotelRepository : IRepository<Domain.Hotel>
     {
-        private readonly HotelContext _context = new HotelContextFactory().CreateDbContext();
+        private readonly IDbManager _context;
+
+        public HotelRepository(IDbManager context)
+        {
+            _context = context;
+        }
 
         public Domain.Hotel Add(Domain.Hotel obj)
         {
@@ -72,7 +77,7 @@ namespace Hotel.Infrastructure.Repository
         {
             var hotel = Get(obj);
 
-            _context.Remove(hotel);
+            _context.Hotels.Remove(hotel);
 
             return hotel;
         }
