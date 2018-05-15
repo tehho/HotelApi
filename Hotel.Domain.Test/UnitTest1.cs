@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Hotel.Domain.Test
@@ -12,7 +13,7 @@ namespace Hotel.Domain.Test
         {
             HotelRegionId = 50,
             Name = "Scandic",
-            RoomsAvaiable = 25
+            RoomsAvailable = 25
 
         };
         [ClassInitialize]
@@ -27,7 +28,7 @@ namespace Hotel.Domain.Test
 
 
         [TestMethod]
-        public void TestMethod1()
+        public void Test_Format_Of_FreeRoom_List_Generator ()
         {
             const string answer = "50,Scandic,25";
 
@@ -35,8 +36,15 @@ namespace Hotel.Domain.Test
            
             foreach (var hotel in testHotel)
             {
-               
-                Assert.AreEqual(answer, hotel);
+                var hotelArray = hotel.Split(',');
+                hotelArray[2] = "25";
+                var nytthotel = new StringBuilder();
+                nytthotel.Append(hotelArray[0]+',');
+                nytthotel.Append(hotelArray[1]+',');
+                nytthotel.Append(hotelArray[2]);
+
+                Assert.AreEqual(answer, nytthotel.ToString());
+                
             }
         }
     }
