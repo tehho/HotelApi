@@ -12,7 +12,22 @@ namespace Hotel.Infrastructure.Repository
 
         public Domain.Hotel Add(Domain.Hotel obj)
         {
+            if (string.IsNullOrEmpty(obj.Name))
+                throw new ArgumentException();
+
+            if (obj.Region == null && obj.HotelRegionId == null)
+                throw new ArgumentException();
+
+            if (obj.RoomsAvailable == null)
+                obj.RoomsAvailable = 0;
+
+            if (obj.HotelRegionId == null)
+                obj.HotelRegionId = _context.HotelRegions.Single(region => region.Name == obj.Region.Name).Id;
+            else
+                obj.Region = _context.HotelRegions.Single(region => region.Id == obj.HotelRegionId);
+
             _context.Hotels.Add(obj);
+            _context.SaveChanges();
             return obj;
         }
 
