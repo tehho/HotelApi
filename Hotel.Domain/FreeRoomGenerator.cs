@@ -49,7 +49,7 @@ namespace Hotel.Domain
                 {
                     HotelRegionId = hotel.HotelRegionId,
                     Name = hotel.Name,
-                    RoomsAvaiable = randomFreeRoom
+                    RoomsAvailable = randomFreeRoom
                 });
             }
             

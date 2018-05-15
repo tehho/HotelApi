@@ -1,48 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hotel.Infrastructure.DbManager;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hotel.Infrastructure.Repository
 {
-    public class HotelRepository : IRepository<Hotel.Domain.Hotel>
+    public class HotelRepository : IRepository<Domain.Hotel>
     {
-        private HotelContext _context = new HotelContextFactory().CreateDbContext();
+        private readonly HotelContext _context = new HotelContextFactory().CreateDbContext();
 
-        public Hotel.Domain.Hotel Add(Hotel.Domain.Hotel obj)
+        public Domain.Hotel Add(Domain.Hotel obj)
         {
-            throw new NotImplementedException();
+            _context.Hotels.Add(obj);
+            return obj;
         }
 
-        public Hotel.Domain.Hotel Get(Hotel.Domain.Hotel obj)
+        public Domain.Hotel Get(Domain.Hotel obj)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+                throw new ArgumentNullException();
+
+            if (obj.Id != null)
+                return SearchOne(hotel => hotel.Id == obj.Id);
+
+            if (obj.Name != null)
+                return SearchOne(hotel => hotel.Name == obj.Name);
+
+            throw new ArgumentException();
         }
 
-        public Hotel.Domain.Hotel Update(Hotel.Domain.Hotel obj)
+        public Domain.Hotel Update(Domain.Hotel obj)
         {
-            throw new NotImplementedException();
+            var hotel = Get(obj);
+            if (obj.Name != null)
+            {
+                hotel.Name = obj.Name;
+            }
+            
+            if (obj.HotelRegionId != null)
+            {
+                hotel.HotelRegionId = obj.HotelRegionId;
+            }
+
+            if (obj.RoomsAvailable != null)
+            {
+                hotel.RoomsAvailable = obj.RoomsAvailable;
+            }
+
+            _context.SaveChanges();
+
+            return hotel;
         }
 
-        public Hotel.Domain.Hotel Remove(Hotel.Domain.Hotel obj)
+        public Domain.Hotel Remove(Domain.Hotel obj)
         {
-            throw new NotImplementedException();
+            var hotel = Get(obj);
+
+            _context.Remove(hotel);
+
+            return hotel;
         }
 
-        public List<Hotel.Domain.Hotel> GetAll()
+        public List<Domain.Hotel> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Hotels.ToList();
         }
 
-        public List<Hotel.Domain.Hotel> Search(Hotel.Domain.Hotel obj)
+        public List<Domain.Hotel> Search(Domain.Hotel obj)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+                throw new ArgumentNullException();
+
+            if (obj.HotelRegionId != null)
+                return SearchList(hotel => hotel.HotelRegionId == obj.HotelRegionId).ToList();
+
+            if (obj.RoomsAvailable != null)
+                return SearchList(hotel => hotel.RoomsAvailable > obj.RoomsAvailable).ToList();
+
+            if (obj.Name != null)
+                return SearchList(hotel => hotel.Name.Contains(obj.Name)).ToList();
+
+            return GetAll();
         }
 
         public bool Reseed()
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var list = _context.Hotels.ToList();
+                _context.Hotels.RemoveRange(list);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
+        public Domain.Hotel SearchOne(Func<Domain.Hotel, bool> method)
+        {
+            return _context.Hotels.Single(method);
+        }
+        public IEnumerable<Domain.Hotel> SearchList(Func<Domain.Hotel, bool> method)
+        {
+            return _context.Hotels.Include(hotel => hotel.Region).Where(method);
+        }
       
     }
 }

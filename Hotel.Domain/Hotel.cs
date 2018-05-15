@@ -8,17 +8,17 @@ namespace Hotel.Domain
 
         [Required] public string Name { get; set; }
 
-        public int RoomsAvaiable { get; set; }
+        public int? RoomsAvailable { get; set; }
 
         [Required]
-        public int HotelRegionId { get; set; }
+        public int? HotelRegionId { get; set; }
 
         [Required]
         public HotelRegion Region { get; set; }
 
         public Hotel()
         {
-            RoomsAvaiable = 0;
+            RoomsAvailable = 0;
         }
     }
 }

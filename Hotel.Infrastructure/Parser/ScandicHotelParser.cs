@@ -1,37 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Hotel.Infrastructure.Parser
 {
     public class ScandicHotelParser : IHotelParser
     {
-        public Hotel.Domain.Hotel Parse(params string[] value)
+        public List<Domain.Hotel> Parse(params string[] value)
         {
-            if (value.Length == 1)
+            return value.Select(line =>
             {
-                var list = value[0].Split(",");
-                if (list.Length == 1)
-                    throw new ArgumentException("Hotel", "Value in ScandicHotelParser was not compattable with Scandic parser code.");
+                var list = line.Split(',');
 
-                return Parse(list);
-            }
+                //TODO Magic strings?
+                if (list.Length != 3)
+                    throw new FormatException("Value format is wrong!");
+                
+                if (!int.TryParse(list[0], out var regionId))
+                    throw new ArgumentException("Region Id is not a number");
 
+                if (!int.TryParse(list[2], out var numberOfRooms))
+                    throw  new ArgumentException("Number of free rooms is not a number");
 
-            try
-            {
-                var list = value.Select(s => s.Trim()).ToList();
-
-                return new Hotel.Domain.Hotel()
+                return new Domain.Hotel()
                 {
-                    HotelRegionId = int.Parse(list[0]),
+                    HotelRegionId = regionId,
                     Name = list[1],
-                    RoomsAvaiable = int.Parse(list[2])
+                    RoomsAvailable = numberOfRooms
                 };
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("Hotel", "Value in ScandicHotelParser was not compattable with Scandic parser code.");
-            }
+            }).ToList();
         }
     }
 }

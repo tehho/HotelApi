@@ -25,10 +25,11 @@ namespace HotelApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRepository<HotelRegion>, HotelRegionRepository>();
             services.AddMvc();
             var appConfigurations = Configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
             services.AddSingleton(appConfigurations);
+            services.AddTransient<IRepository<HotelRegion>, HotelRegionRepository>();
+            services.AddTransient<IRepository<Hotel.Domain.Hotel>, HotelRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
