@@ -7,7 +7,7 @@ namespace Hotel.Domain
 {
     public class FreeRoomGenerator
     {
-        private string _path;
+        private readonly string _path;
 
         public FreeRoomGenerator(string path)
         {
@@ -52,17 +52,10 @@ namespace Hotel.Domain
                     RoomsAvailable = randomFreeRoom
                 });
             }
-            
-
-            string json = JsonConvert.SerializeObject(_data.ToArray());
+            var json = JsonConvert.SerializeObject(_data.ToArray());
 
            
-            System.IO.File.WriteAllText($"{_path}/BestWestern-{DateTime.Now:yyyy-MM-dd}.json", json);
-
-
+           File.WriteAllText($"{_path}/BestWestern-{DateTime.Now:yyyy-MM-dd}.json", json);
         }
-
     }
-
-
 }
