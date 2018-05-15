@@ -1,7 +1,9 @@
-﻿namespace Hotel.Infrastructure.Parser
+﻿using System.Collections.Generic;
+
+namespace Hotel.Infrastructure.Parser
 {
     public interface IHotelParser
     {
-        Hotel.Domain.Hotel Parse(params string[] value);
+        List<Domain.Hotel> Parse(params string[] value);
     }
 }

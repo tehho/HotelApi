@@ -16,10 +16,16 @@ namespace HotelApi.Controllers
     public class HotelRegionController : Controller
     {
         private readonly IRepository<HotelRegion> _hotelsRepository;
+        private readonly AppConfiguration _appConfiguration;
+        private readonly IHotelParser _scandicParser;
+        private readonly IHotelParser _bestWesternParser;
 
-        public HotelRegionController(IRepository<HotelRegion> hotelsRepository)
+        public HotelRegionController(IRepository<HotelRegion> hotelsRepository, AppConfiguration appConfiguration, IHotelParser scandicParser, IHotelParser bestWesternParser)
         {
             _hotelsRepository = hotelsRepository;
+            _appConfiguration = appConfiguration;
+            _scandicParser = scandicParser;
+            _bestWesternParser = bestWesternParser;
         }
 
         [HttpGet]
@@ -34,77 +40,59 @@ namespace HotelApi.Controllers
 
         private List<HotelRegion> FillRegionsWithHotels(List<HotelRegion> regions)
         {
-            try
-            {
-                string loadFile = GetLastScandicFreeRooms();
+            regions.ForEach(region => region.Hotels = new List<Hotel.Domain.Hotel>());
 
-                if (loadFile != "")
-                {
-                    var list = System.IO.File.ReadAllLines(loadFile).ToList();
+            regions = FillRegionsWithScandicHotels(regions);
 
-                    regions.ForEach(r => r.Hotels = new List<Hotel.Domain.Hotel>());
+            regions = FillRegionsWithBestWesternHotels(regions);
 
-                    list.ForEach(line =>
-                    {
-                        try
-                        {
-                            var hotel = new ScandicHotelParser().Parse(line);
-                            var region = regions.Single(r => r.Id == hotel.HotelRegionId);
-
-                            region.Hotels.Add(hotel);
-                        }
-                        catch (InvalidOperationException ioe)
-                        {
-                            //TODO Logga att regionen inte fanns
-                        }
-                        catch (ArgumentException e)
-                        {
-                            //TODO Logga att det var fel att läsa Scandic filen
-                        }
-
-
-                    });
-                }
-
-              
-
-            }
-            catch (Exception e)
-            {
-               
-            }
             return regions;
         }
 
-        private static string GetLastScandicFreeRooms()
+        private List<HotelRegion> FillRegionsWithBestWesternHotels(List<HotelRegion> regions)
         {
-            var files = Directory.GetFiles("Scandic/").ToList();
-            var regex = new Regex(@"Scandic-^(2[0-1][0-9]{2})-(0[1-9]|[1]{1}[1-2]{1})-(0[1-9]|[1-2]{1}[0-9]{1}|30|31)\.txt$");
+            var regex = new Regex($"BestWestern-(20\\d\\d)-(0[1-9]|10|11|12)-(0[1-9]|[1-2][0-9]|30|31)\\.json");
 
-            DateTime now = DateTime.MinValue;
-            var loadFile = "";
+            var loadFile = Directory.GetFiles(_appConfiguration.ScandicHotels)
+                .Where(file => regex.IsMatch(file))
+                .OrderBy(System.IO.File.GetCreationTime).First();
 
-            foreach (var file in files)
+            if (loadFile == null)
             {
-                if (regex.IsMatch(file))
-                {
-                    var matches = regex.Match(file);
-                    var year = int.Parse(matches.Groups[1].Value);
-                    var month = int.Parse(matches.Groups[2].Value);
-                    var day = int.Parse(matches.Groups[3].Value);
-
-                     var test = new DateTime(year, month, day);
-                     
-
-                    if (test > now)
-                    {
-                        now = test;
-                        loadFile = file;
-                    }
-                }
+                throw new InvalidOperationException();
             }
 
-            return loadFile;
+            _bestWesternParser.Parse(System.IO.File.ReadAllLines(loadFile))
+                .ForEach(hotel =>
+                {
+                    var region = regions.Single(r => r.Id == hotel.HotelRegionId);
+                    region.Hotels.Add(hotel);
+                });
+
+            return regions;
+        }
+
+        private List<HotelRegion> FillRegionsWithScandicHotels(List<HotelRegion> regions)
+        {
+            var regex = new Regex($"Scandic-(20\\d\\d)-(0[1-9]|10|11|12)-(0[1-9]|[1-2][0-9]|30|31)\\.txt$");
+            
+            var loadFile = Directory.GetFiles(_appConfiguration.ScandicHotels)
+                .Where(file => regex.IsMatch(file))
+                .OrderBy(System.IO.File.GetCreationTime).First();
+
+            if (loadFile == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            _scandicParser.Parse(System.IO.File.ReadAllLines(loadFile))
+                .ForEach(hotel =>
+            {
+                var region = regions.Single(r => r.Id == hotel.HotelRegionId);
+                region.Hotels.Add(hotel);
+            });
+
+            return regions;
         }
 
         [HttpGet("{Id}")]
