@@ -9,7 +9,12 @@ namespace Hotel.Infrastructure.Repository
 {
     public class HotelRegionRepository : IRepository<HotelRegion>
     {
-        private HotelContext context = new HotelContextFactory().CreateDbContext();
+        private readonly IDbManager _context;
+
+        public HotelRegionRepository(IDbManager context)
+        {
+            _context = context;
+        }
 
         public HotelRegion Add(HotelRegion obj)
         {
@@ -18,25 +23,25 @@ namespace Hotel.Infrastructure.Repository
             if (obj.Id != null)
             {
                 //TODO: Lägg till update när id finns i db redan
-                context.Database.OpenConnection();
+                _context.Database.OpenConnection();
                 try
                 {
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.HotelRegions ON");
+                    _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.HotelRegions ON");
 
-                    context.HotelRegions.Add(temp);
-                    context.SaveChanges();
+                    _context.HotelRegions.Add(temp);
+                    _context.SaveChanges();
 
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.HotelRegions OFF");
+                    _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.HotelRegions OFF");
                 }
                 finally
                 {
-                    context.Database.CloseConnection();
+                    _context.Database.CloseConnection();
                 }
             }
             else
             {
-                context.HotelRegions.Add(temp);
-                context.SaveChanges();
+                _context.HotelRegions.Add(temp);
+                _context.SaveChanges();
             }
 
             return temp;
@@ -75,7 +80,7 @@ namespace Hotel.Infrastructure.Repository
             if (obj.Name != null)
                 temp.Name = obj.Name;
 
-            context.SaveChanges();
+            _context.SaveChanges();
 
             return temp;
         }
@@ -84,8 +89,8 @@ namespace Hotel.Infrastructure.Repository
         {
             var temp = Get(obj);
 
-            context.HotelRegions.Remove(temp);
-            context.SaveChanges();
+            _context.HotelRegions.Remove(temp);
+            _context.SaveChanges();
 
 
             return temp;
@@ -115,9 +120,9 @@ namespace Hotel.Infrastructure.Repository
         {
             try
             {
-                var list = context.HotelRegions.ToList();
-                context.RemoveRange(list);
-                context.SaveChanges();
+                var list = _context.HotelRegions.ToList();
+                _context.HotelRegions.RemoveRange(list);
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -128,12 +133,12 @@ namespace Hotel.Infrastructure.Repository
 
         private HotelRegion SearchSingle(Func<HotelRegion, bool> method)
         {
-            return context.HotelRegions.Include(hotelRegion => hotelRegion.Hotels).Single(method);
+            return _context.HotelRegions.Include(hotelRegion => hotelRegion.Hotels).Single(method);
         }
 
         private IEnumerable<HotelRegion> SearchList(Func<HotelRegion, bool> method)
         {
-            return context.HotelRegions.Include(hotelRegion => hotelRegion.Hotels).Where(method).ToList();
+            return _context.HotelRegions.Include(hotelRegion => hotelRegion.Hotels).Where(method).ToList();
         }
 
     }

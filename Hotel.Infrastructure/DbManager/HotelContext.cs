@@ -3,15 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hotel.Infrastructure.DbManager
 {
-    public interface IDbManager
-    {
-        DbSet<HotelRegion> HotelRegions { get; set; }
-        DbSet<Domain.Hotel> Hotels { get; set; }
-
-    }
-    public class HotelContext : DbContext, 
-        
-        IDbManager
+    public class HotelContext : DbContext, IDbManager
     {
         public static HotelContext Instance { get; } = new HotelContextFactory().CreateDbContext();
 
@@ -20,7 +12,6 @@ namespace Hotel.Infrastructure.DbManager
 
         public HotelContext(DbContextOptions<HotelContext> options) : base(options)
         {
-
         }
     }
 }
