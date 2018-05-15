@@ -1,5 +1,9 @@
 ﻿using System;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace Hotel.Infrastructure.DbManager
 {
@@ -41,7 +45,7 @@ namespace Hotel.Infrastructure.DbManager
                     _connectionString = configuration.GetConnectionString("DefaultConnection");
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     _connectionString = "Server = (localdb)\\mssqllocaldb ; Database = db_hotelapi_andreas_joakim; Trusted_Connection = true;";
                 }

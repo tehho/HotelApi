@@ -8,7 +8,7 @@ namespace Hotel.Infrastructure.Parser
     {
         public List<Domain.Hotel> Parse(params string[] value)
         {
-            return value.ToList().Select(line =>
+            return value.Select(line =>
             {
                 var list = line.Split(',');
 

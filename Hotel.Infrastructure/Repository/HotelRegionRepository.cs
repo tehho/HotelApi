@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hotel.Domain;
 using Hotel.Infrastructure.DbManager;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hotel.Infrastructure.Repository
 {
@@ -92,11 +93,7 @@ namespace Hotel.Infrastructure.Repository
 
         public List<HotelRegion> GetAll()
         {
-            List<HotelRegion> list = null;
-
-            list = context.HotelRegions.ToList();
-
-            return list;
+            return context.HotelRegions.ToList();
         }
 
         public List<HotelRegion> Search(HotelRegion obj)
@@ -122,7 +119,7 @@ namespace Hotel.Infrastructure.Repository
                 context.RemoveRange(list);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

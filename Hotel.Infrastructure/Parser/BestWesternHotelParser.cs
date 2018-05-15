@@ -8,7 +8,7 @@ namespace Hotel.Infrastructure.Parser
     {
         public List<Domain.Hotel> Parse(params string[] value)
         {
-            return JArray.FromObject(value).ToObject<List<Domain.Hotel>>();
+            return JArray.Parse(string.Join("", value)).ToObject<List<Domain.Hotel>>();
         }
     }
 }

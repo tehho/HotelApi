@@ -20,17 +20,21 @@ namespace HotelApi.Controllers
         private readonly IHotelParser _scandicParser;
         private readonly IHotelParser _bestWesternParser;
 
-        public HotelRegionController(IRepository<HotelRegion> hotelsRepository, AppConfiguration appConfiguration, IHotelParser scandicParser, IHotelParser bestWesternParser)
+        public HotelRegionController(IRepository<HotelRegion> hotelsRepository, AppConfiguration appConfiguration)
         {
             _hotelsRepository = hotelsRepository;
             _appConfiguration = appConfiguration;
-            _scandicParser = scandicParser;
-            _bestWesternParser = bestWesternParser;
+            _scandicParser = new ScandicHotelParser();
+            _bestWesternParser = new BestWesternHotelParser();
         }
+
+
 
         [HttpGet]
         public IActionResult DisplayAllRegions()
         {
+
+
             var regions = _hotelsRepository.GetAll();
 
             regions = FillRegionsWithHotels(regions);
