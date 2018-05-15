@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HotelApi.DbManager
+namespace Hotel.Infrastructure.Repository
 {
     public interface IRepository<T>
     {

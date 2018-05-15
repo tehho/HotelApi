@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HotelApi.Parser
+namespace Hotel.Infrastructure.Parser
 {
-    public interface IHotelParser
-    {
-        Hotel.Domain.Hotel Parse(params string[] value);
-    }
-
     public class ScandicHotelParser : IHotelParser
     {
         public Hotel.Domain.Hotel Parse(params string[] value)

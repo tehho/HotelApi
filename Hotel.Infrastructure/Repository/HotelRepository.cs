@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HotelApi.DbManager;
+using Hotel.Infrastructure.DbManager;
 
-namespace HotelApi
+namespace Hotel.Infrastructure.Repository
 {
     public class HotelRepository : IRepository<Hotel.Domain.Hotel>
     {

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace HotelApi.DbManager
+namespace Hotel.Infrastructure.DbManager
 {
     public class HotelContextFactory : IDesignTimeDbContextFactory<HotelContext>
     {
