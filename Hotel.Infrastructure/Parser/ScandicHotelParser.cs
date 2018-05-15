@@ -26,7 +26,7 @@ namespace Hotel.Infrastructure.Parser
                 {
                     HotelRegionId = regionId,
                     Name = list[1],
-                    RoomsAvaiable = numberOfRooms
+                    RoomsAvailable = numberOfRooms
                 };
             }).ToList();
         }

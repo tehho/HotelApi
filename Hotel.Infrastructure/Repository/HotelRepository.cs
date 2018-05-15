@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hotel.Infrastructure.DbManager;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hotel.Infrastructure.Repository
 {
@@ -42,9 +43,9 @@ namespace Hotel.Infrastructure.Repository
                 hotel.HotelRegionId = obj.HotelRegionId;
             }
 
-            if (obj.RoomsAvaiable != null)
+            if (obj.RoomsAvailable != null)
             {
-                hotel.RoomsAvaiable = obj.RoomsAvaiable;
+                hotel.RoomsAvailable = obj.RoomsAvailable;
             }
 
             _context.SaveChanges();
@@ -74,8 +75,11 @@ namespace Hotel.Infrastructure.Repository
             if (obj.HotelRegionId != null)
                 return SearchList(hotel => hotel.HotelRegionId == obj.HotelRegionId).ToList();
 
-            if (obj.RoomsAvaiable != null)
-                return SearchList(hotel => hotel.RoomsAvaiable > obj.RoomsAvaiable).ToList();
+            if (obj.RoomsAvailable != null)
+                return SearchList(hotel => hotel.RoomsAvailable > obj.RoomsAvailable).ToList();
+
+            if (obj.Name != null)
+                return SearchList(hotel => hotel.Name.Contains(obj.Name)).ToList();
 
             return GetAll();
         }
@@ -102,7 +106,7 @@ namespace Hotel.Infrastructure.Repository
         }
         public IEnumerable<Domain.Hotel> SearchList(Func<Domain.Hotel, bool> method)
         {
-            return _context.Hotels.Where(method);
+            return _context.Hotels.Include(hotel => hotel.Region).Where(method);
         }
       
     }

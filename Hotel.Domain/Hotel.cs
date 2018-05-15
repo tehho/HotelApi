@@ -8,7 +8,7 @@ namespace Hotel.Domain
 
         [Required] public string Name { get; set; }
 
-        public int? RoomsAvaiable { get; set; }
+        public int? RoomsAvailable { get; set; }
 
         [Required]
         public int? HotelRegionId { get; set; }
@@ -18,7 +18,7 @@ namespace Hotel.Domain
 
         public Hotel()
         {
-            RoomsAvaiable = 0;
+            RoomsAvailable = 0;
         }
     }
 }
