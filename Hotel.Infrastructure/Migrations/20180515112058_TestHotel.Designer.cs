@@ -11,8 +11,8 @@ using System;
 namespace Hotel.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelContext))]
-    [Migration("20180515091407_HotelClass")]
-    partial class HotelClass
+    [Migration("20180515112058_TestHotel")]
+    partial class TestHotel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

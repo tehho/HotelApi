@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Hotel.Infrastructure.Migrations
 {
-    public partial class HotelClass : Migration
+    public partial class TestHotel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,7 @@ namespace Hotel.Infrastructure.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     HotelRegionId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    RoomsAvaiable = table.Column<int>(nullable: true)
+                    RoomsAvailable = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

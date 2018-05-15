@@ -33,11 +33,13 @@ namespace HotelApi.Controllers
         [HttpGet]
         public IActionResult DisplayAllRegions()
         {
-
-
             var regions = _hotelsRepository.GetAll();
 
-            regions = FillRegionsWithHotels(regions);
+            regions.ForEach(region => region.Hotels.ForEach(hotel =>
+            {
+                hotel.Region = null;
+                hotel.HotelRegionId = null;
+            }));
 
             return Ok(regions);
         }
@@ -152,9 +154,16 @@ namespace HotelApi.Controllers
         {
             if (_hotelsRepository.Reseed())
             {
-                AddRegion(new HotelRegion() { Name = "Göteborg Centrum", Id = 50 });
-                AddRegion(new HotelRegion() { Name = "Göteborg Hisingen", Id = 60 });
-                AddRegion(new HotelRegion() { Name = "Helsingborg", Id = 70 });
+                try
+                {
+                    AddRegion(new HotelRegion() { Name = "Göteborg Centrum", Id = 50 });
+                    AddRegion(new HotelRegion() { Name = "Göteborg Hisingen", Id = 60 });
+                    AddRegion(new HotelRegion() { Name = "Helsingborg", Id = 70 });
+                }
+                catch (Exception e)
+                {
+                    return Ok("Database reseeded - No elements added");
+                }
                 return Ok("Database reseeded");
             }
             return BadRequest("Reseeding failed");
