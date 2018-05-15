@@ -19,7 +19,7 @@ document.getElementById("reseedDatabase-submit").addEventListener("click", funct
 
 function appendHotelRegionToContent(result) {
 
-    if (result != undefined) {
+    if (result !== undefined) {
 
 
         var content = document.getElementById("content");
