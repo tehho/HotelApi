@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HotelApi.DbManager;
+using Hotel.Infrastructure.DbManager;
 
-namespace HotelApi
+namespace Hotel.Infrastructure.Repository
 {
     public class HotelRepository : IRepository<Hotel.Domain.Hotel>
     {
-        private HotelContext context = new HotelContextFactory().CreateDbContext();
+        private HotelContext _context = new HotelContextFactory().CreateDbContext();
+
         public Hotel.Domain.Hotel Add(Hotel.Domain.Hotel obj)
         {
             throw new NotImplementedException();

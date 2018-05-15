@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Hotel.Domain;
-using HotelApi.DbManager;
-using HotelApi.Parser;
+using Hotel.Infrastructure.Parser;
+using Hotel.Infrastructure.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 

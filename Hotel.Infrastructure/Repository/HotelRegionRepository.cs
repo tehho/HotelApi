@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hotel.Domain;
-using HotelApi.DbManager;
-using Microsoft.Azure.KeyVault.Models;
-using Microsoft.EntityFrameworkCore;
+using Hotel.Infrastructure.DbManager;
 
-namespace HotelApi.Repository
+namespace Hotel.Infrastructure.Repository
 {
     public class HotelRegionRepository : IRepository<HotelRegion>
     {

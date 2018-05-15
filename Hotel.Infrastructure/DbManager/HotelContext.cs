@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hotel.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Hotel.Domain;
 
-namespace HotelApi.DbManager
+namespace Hotel.Infrastructure.DbManager
 {
     public class HotelContext : DbContext
     {
