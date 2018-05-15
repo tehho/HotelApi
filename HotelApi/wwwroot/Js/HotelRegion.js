@@ -1,31 +1,48 @@
-﻿document.getElementById("SeeAllRegion-Submit").addEventListener("click", function() {
-    fetch("http://localhost:30763/api/hotelregion/")
-        .then(result => result.json())
-        .catch(error => console.error('Error:', error))
-        .then(appendHotelRegionToContent);
+﻿document.getElementById("SeeAllRegion-Submit").addEventListener("click",
+    function () {
+        fetch("http://localhost:30763/api/hotelregion/")
+            .then(result => {
+                console.log(result);
+                return result.json();
+            })
+            .catch(error => console.error('Error:', error))
+            .then(appendHotelRegionToContent);
+    });
+
+document.getElementById("reseedDatabase-submit").addEventListener("click", function() {
+    fetch("http://localhost:30763/api/hotelregion/reseeddatabase",
+            {
+                method: "DELETE"
+            })
+        .then(result => alert(result));
 });
 
 function appendHotelRegionToContent(result) {
-    var content = document.getElementById("content");
-    content.innerHTML = "";
-    console.log(result);
-    for (var hotelregion of result) {
-        var div = document.createElement("div");
 
-        var element = document.createElement("h1");
-        element.innerText = hotelregion.name;
-        div.appendChild(element);
+    if (result !== undefined) {
 
-        element = document.createElement("p");
-        element.innerText = "Regionsid: " + hotelregion.id;
-        div.appendChild(element);
 
-        if (hotelregion.hotels.length > 0) {
-            appendHotelTableToElement(hotelregion.hotels, div);
+        var content = document.getElementById("content");
+        content.innerHTML = "";
+        console.log(result);
+        for (var hotelregion of result) {
+            var div = document.createElement("div");
 
+            var element = document.createElement("h1");
+            element.innerText = hotelregion.name;
+            div.appendChild(element);
+
+            element = document.createElement("p");
+            element.innerText = "Regionsid: " + hotelregion.id;
+            div.appendChild(element);
+
+            if (hotelregion.hotels.length > 0) {
+                appendHotelTableToElement(hotelregion.hotels, div);
+
+            }
+
+            content.appendChild(div);
         }
-
-        content.appendChild(div);
     }
 }
 
@@ -81,4 +98,8 @@ function appendHotelTableToElement(listOfHotels, div) {
 
     div.appendChild(table);
 
+}
+
+function parseJson(input) {
+    input.Json();
 }

@@ -64,7 +64,7 @@ namespace Hotel.Infrastructure.Repository
 
         public List<Domain.Hotel> GetAll()
         {
-            return _context.Hotels.ToList();
+            return SearchList(hotel => true).ToList();
         }
 
         public List<Domain.Hotel> Search(Domain.Hotel obj)
@@ -88,7 +88,6 @@ namespace Hotel.Infrastructure.Repository
         {
             try
             {
-
                 var list = _context.Hotels.ToList();
                 _context.Hotels.RemoveRange(list);
             }
@@ -106,7 +105,7 @@ namespace Hotel.Infrastructure.Repository
         }
         public IEnumerable<Domain.Hotel> SearchList(Func<Domain.Hotel, bool> method)
         {
-            return _context.Hotels.Include(hotel => hotel.Region).Where(method);
+            return _context.Hotels.Include(hotel => hotel.Region).Where(method).ToList();
         }
       
     }
