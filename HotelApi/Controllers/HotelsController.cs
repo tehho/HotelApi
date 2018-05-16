@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices.ActiveDirectory;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Hotel.Infrastructure.Parser;
 using Hotel.Infrastructure.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace HotelApi.Controllers
@@ -30,22 +33,29 @@ namespace HotelApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddHotel([FromBody]Hotel.Domain.Hotel hotel)>
+        public IActionResult AddHotel([FromBody]Hotel.Domain.Hotel hotel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            try
+            {
 
-            if (hotel.Name.Contains("Scandic"))
-            {
-                AddToFileScandic(hotel);
+                if (hotel.Name.Contains("Scandic"))
+                {
+                    AddToFileScandic(hotel);
+                }
+                else if (hotel.Name.Contains("Bestwestern"))
+                {
+                    AddToFileBestwestern(hotel);
+                }
+                else
+                {
+                    BadRequest($"Hotelname not recognized: {hotel.Name}");
+                }
             }
-            else if (hotel.Name.Contains("Bestwestern"))
+            catch (Exception e)
             {
-                AddToFileBestwestern(hotel);
-            }
-            else
-            {
-                BadRequest($"Hotelname not recognized: {hotel.Name}");
+                return BadRequest(e.ToString());
             }
 
             return Ok("Hotel added to todays list");
@@ -53,6 +63,14 @@ namespace HotelApi.Controllers
 
         private void AddToFileBestwestern(Hotel.Domain.Hotel hotel)
         {
+            var path = _appConfiguration.ScandicHotels + $"/Bestwestern-{DateTime.Now:yyyy-MM-dd}.json";
+            var list = JArray.Parse(System.IO.File.ReadAllText(path)).ToObject<List<Hotel.Domain.Hotel>>();
+            list.Add(hotel);
+
+            using (var writer = System.IO.File.CreateText(path))
+            {
+                writer.Write(JsonConvert.SerializeObject(list));
+            }
 
         }
 
@@ -60,8 +78,8 @@ namespace HotelApi.Controllers
         {
             var path = _appConfiguration.ScandicHotels + $"/Scandic-{DateTime.Now:yyyy-MM-dd}.txt";
 
-            using (var writer = System.IO.File.AppendText(path))
-            writer.WriteLine(new ScandicSerializer().Serializer(hotel));
+            using (var writer = new StreamWriter(path, false))
+                writer.WriteLine(new ScandicSerializer().Serializer(hotel));
         }
 
         [HttpDelete("Reseed")]
