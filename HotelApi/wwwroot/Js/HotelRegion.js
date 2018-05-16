@@ -1,6 +1,6 @@
 ﻿document.getElementById("SeeAllRegion-Submit").addEventListener("click",
     function () {
-        fetch("http://localhost:30763/api/hotelregion/")
+        fetch("/api/hotelregion/")
             .then(result => {
                 console.log(result);
                 return result.json();
@@ -10,7 +10,7 @@
     });
 
 document.getElementById("reseedDatabase-submit").addEventListener("click", function() {
-    fetch("http://localhost:30763/api/hotelregion/reseeddatabase",
+    fetch("/api/hotelregion/reseeddatabase",
             {
                 method: "DELETE"
             })

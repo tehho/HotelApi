@@ -1,13 +1,20 @@
 ﻿
+function errorLogger(result) {
+    console.error("Error: ", result);
+    console.log(result.status);
+    console.log(result.statusText);
+    console.log(result.error);
+}
+
 document.getElementById("hotelAdder-submit").addEventListener("click", sendToDatabase);
 
 function fillHotelRegions() {
 
     fetch("/api/hotelregion/")
         .then(result => {
-                console.log(result);
-                return result.json();
-            })
+            console.log(result);
+            return result.json();
+        })
         .catch(result => console.error("Error: ", result))
         .then(function (result) {
 
@@ -33,24 +40,44 @@ function fillHotelRegions() {
 function sendToDatabase() {
     var chain = document.getElementById("hotelChain").value;
 
-    var data = {};
-    data.name = document.getElementById("hotelAdder-name").value;
-    data.hotelregionid = document.getElementById("hotelAdder-region").value;
-    data.roomsavailable = document.getElementById("hotelAdder-roomsAvailable").value;
+    var hotel = {
+        name: document.getElementById("hotelAdder-name").value,
+        hotelRegionId: document.getElementById("hotelAdder-region").value,
+        roomsAvailable: document.getElementById("hotelAdder-roomsAvailable").value,
+    };
 
-    if (!data.name.includes(chain))
-        data.name = chain + " " + data.name;
+    if (!hotel.name.includes(chain)) {
+        hotel.name = chain + " " + hotel.name;
+    }
 
-    //console.log(JSON.stringify(data));
+    console.log(JSON.stringify(hotel));
+
+    var data = new FormData();
+    data.append("json", JSON.stringify(hotel));
+
+
+    //console.log(data);
     //return;
 
     fetch("/api/hotels/",
-            {
-                body: JSON.stringify(data),
-                method: "POST"
-            })
-        .then(result => result.json())
-        .catch(result => console.error("Error: ", result));
+        {
+            body: JSON.stringify(hotel),
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(result => {
+            console.log(result);
+            if (result.status !== 200)
+                errorLogger(result);
+            return result.json();
+        })
+        .catch(result => console.error("Error: ", result))
+        .then(result => {
+            alert(result);
+        });
 
 }
 

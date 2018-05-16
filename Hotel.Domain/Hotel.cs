@@ -13,7 +13,6 @@ namespace Hotel.Domain
         [Required]
         public int? HotelRegionId { get; set; }
 
-        [Required]
         public HotelRegion Region { get; set; }
 
         public Hotel()

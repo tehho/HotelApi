@@ -30,30 +30,38 @@ namespace HotelApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddHotel(Hotel.Domain.Hotel hotel)
+        public IActionResult AddHotel([FromBody]Hotel.Domain.Hotel hotel)>
         {
-            if (hotel == null)
-                return BadRequest();
-            try
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (hotel.Name.Contains("Scandic"))
             {
-                if (hotel.Name.Contains("Scandic"))
-                {
-                    AddToFileScandic(hotel);
-                }
+                AddToFileScandic(hotel);
             }
-            catch (ArgumentException)
+            else if (hotel.Name.Contains("Bestwestern"))
             {
-                _hotelRepository.Add(hotel);
+                AddToFileBestwestern(hotel);
+            }
+            else
+            {
+                BadRequest($"Hotelname not recognized: {hotel.Name}");
             }
 
-            return Ok();
+            return Ok("Hotel added to todays list");
+        }
+
+        private void AddToFileBestwestern(Hotel.Domain.Hotel hotel)
+        {
+
         }
 
         private void AddToFileScandic(Hotel.Domain.Hotel hotel)
         {
             var path = _appConfiguration.ScandicHotels + $"/Scandic-{DateTime.Now:yyyy-MM-dd}.txt";
-            
-            System.IO.File.AppendText(path).WriteLine(new ScandicSerializer().Serializer(hotel));
+
+            using (var writer = System.IO.File.AppendText(path))
+            writer.WriteLine(new ScandicSerializer().Serializer(hotel));
         }
 
         [HttpDelete("Reseed")]

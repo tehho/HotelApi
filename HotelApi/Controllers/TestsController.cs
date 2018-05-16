@@ -38,7 +38,7 @@ namespace HotelApi.Controllers
                 _context.Database.OpenConnection();
                 _context.Database.CloseConnection();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(503);
             }
