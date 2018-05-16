@@ -4,30 +4,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Hotel.Domain;
+using Hotel.Infrastructure.DbManager;
 using Hotel.Infrastructure.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelApi.Controllers
 {
-    [Route("test/[controller]")]
-    public class TestsController :Controller
+    [Route("[controller]")]
+    public class TestsController : Controller
     {
-       
-            private readonly IRepository<HotelRegion> _hotelRepository;
-            private readonly AppConfiguration _appConfiguration;
+
+        private readonly IRepository<HotelRegion> _hotelRepository;
+        private readonly AppConfiguration _appConfiguration;
+        private readonly HotelContext _context;
 
 
-            public TestsController(IRepository<HotelRegion> hotelsRepository, AppConfiguration appConfiguration)
+
+        public TestsController(IRepository<HotelRegion> hotelsRepository, AppConfiguration appConfiguration,
+            HotelContext context)
+        {
+            _hotelRepository = hotelsRepository;
+            _appConfiguration = appConfiguration;
+            _context = context;
+        }
+
+        [HttpGet("Database")]
+        public IActionResult GetAllHotels()
+        {
+            try
             {
-                _hotelRepository = hotelsRepository;
-                _appConfiguration = appConfiguration;
+                _context.Database.OpenConnection();
+                _context.Database.CloseConnection();
             }
-
-            [HttpGet]
-            public IActionResult GetAllHotels()
+            catch (Exception e)
             {
-                return Ok(_hotelRepository.GetAll());
+                return StatusCode(503);
             }
+            return Ok("Database works");
+        }
 
-        
+
+    }
 }

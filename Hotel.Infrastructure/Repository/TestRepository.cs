@@ -10,9 +10,9 @@ namespace Hotel.Infrastructure.Repository
 {
     public class TestRepository : IRepository<HotelRegion>
     {
-        private readonly IDbManager _context;
+        private readonly HotelContext _context;
 
-        public TestRepository(IDbManager context)
+        public TestRepository(HotelContext context)
         {
             _context = context;
         }
