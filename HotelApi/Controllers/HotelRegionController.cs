@@ -35,12 +35,6 @@ namespace HotelApi.Controllers
         {
             var regions = _hotelsRepository.GetAll();
 
-            regions.ForEach(region => region.Hotels.ForEach(hotel =>
-            {
-                hotel.Region = null;
-                hotel.HotelRegionId = null;
-            }));
-
             return Ok(regions);
         }
 
@@ -160,7 +154,7 @@ namespace HotelApi.Controllers
                     AddRegion(new HotelRegion() { Name = "Göteborg Hisingen", Id = 60 });
                     AddRegion(new HotelRegion() { Name = "Helsingborg", Id = 70 });
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return Ok("Database reseeded - No elements added");
                 }
