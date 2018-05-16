@@ -31,7 +31,7 @@ namespace HotelApi.Controllers
         }
 
         [HttpGet("Database")]
-        public IActionResult GetAllHotels()
+        public IActionResult CheckConnectionToDatabase()
         {
             try
             {
@@ -45,6 +45,33 @@ namespace HotelApi.Controllers
             return Ok("Database works");
         }
 
+        [HttpGet("ScandicFileTest")]
+        public IActionResult CheckScandicFile_IsToday()
 
+        {
+            var path = _appConfiguration.ScandicHotels + $"/Scandic-{DateTime.Now:yyyy-MM-dd}.txt";
+
+
+            if (System.IO.File.Exists(path))
+                return Ok("Scandic file present");
+
+            return NotFound($"{path} not found");
+
+        }
+    
+
+        [HttpGet("BestwesternFileTest")]
+        public IActionResult CheckBestWesternFile_IsToday()
+
+        {
+            var path = _appConfiguration.ScandicHotels + $"/BestWestern-{DateTime.Now:yyyy-MM-dd}.json";
+
+
+            if (System.IO.File.Exists(path))
+                return Ok("Best Western file present");
+
+            return NotFound($"{path} not found");
+
+        }
     }
 }
