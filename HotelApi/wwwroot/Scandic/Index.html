@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <style type="text/css">.container { 
+     display: flex;
+     flex-flow: row;
+     margin: auto;
+
+}</style>
+</head>
+<body>
+    <h1>registration form</h1>
+    <div class="container">
+        <div id="form" style="margin: auto; width: 70%; max-width: 70%;">
+            Hotelkjedja: <select id="hotelChain">
+                <option value="Scandic" selected="selected">Scandic</option>
+                <option value="BestWestern">BestWestern</option>
+            </select>
+            <br />Name: <input id="hotelAdder-name" />
+            <br />Region: <input id="hotelAdder-region" />
+            <br />Rooms available: <input id="hotelAdder-roomsAvailable" />
+            <br /><button id="hotelAdder-submit">Lägg till</button>
+        </div>
+
+        <div id="Repository" style="margin: auto; width: 25%;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Id
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="hotelRegions"></tbody>
+            </table>
+        </div>
+
+    </div>
+    <script src="/Js/Scandic.js"></script>
+</body>
+</html>
