@@ -35,6 +35,8 @@ namespace HotelApi.Controllers
         {
             var regions = _hotelsRepository.GetAll();
 
+            regions = FillRegionsWithHotels(regions);
+
             return Ok(regions);
         }
 
