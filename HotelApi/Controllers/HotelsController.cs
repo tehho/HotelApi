@@ -35,25 +35,17 @@ namespace HotelApi.Controllers
                 return BadRequest(ModelState);
             try
             {
-
                 if (hotel.Name.ToLower().Contains("scandic"))
-                {
                     AddToFileScandic(hotel);
-                }
                 else if (hotel.Name.ToLower().Contains("bestwestern"))
-                {
                     AddToFileBestwestern(hotel);
-                }
                 else
-                {
                     BadRequest($"Hotelname not recognized: {hotel.Name}");
-                }
             }
             catch (Exception e)
-            {
+            { 
                 return BadRequest(e.ToString());
             }
-
             return Ok("Hotel added to todays list");
         }
 
@@ -75,7 +67,6 @@ namespace HotelApi.Controllers
             {
                 writer.Write(JsonConvert.SerializeObject(list));
             }
-
         }
 
         private void AddToFileScandic(Hotel.Domain.Hotel hotel)

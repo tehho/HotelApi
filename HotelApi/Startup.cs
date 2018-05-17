@@ -31,7 +31,8 @@ namespace HotelApi
             services.AddSingleton(appConfigurations);
             services.AddTransient<IRepository<HotelRegion>, HotelRegionRepository>();
             services.AddTransient<IRepository<Hotel.Domain.Hotel>, HotelRepository>();
-            services.AddTransient(x => new HotelContextFactory().CreateDbContext());
+            services.AddTransient(x => 
+                new HotelContextFactory().CreateDbContext());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

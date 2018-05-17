@@ -36,14 +36,12 @@ namespace Hotel.Infrastructure.DbManager
             {
                 try
                 {
-
                     var builder = new ConfigurationBuilder();
                     builder.AddJsonFile("appsettings.json", optional: false);
 
                     var configuration = builder.Build();
 
                     _connectionString = configuration.GetConnectionString("DefaultConnection");
-
                 }
                 catch (Exception)
                 {
