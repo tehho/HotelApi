@@ -40,11 +40,11 @@ namespace HotelApi.Controllers
             try
             {
 
-                if (hotel.Name.Contains("Scandic"))
+                if (hotel.Name.ToLower().Contains("scandic"))
                 {
                     AddToFileScandic(hotel);
                 }
-                else if (hotel.Name.Contains("Bestwestern"))
+                else if (hotel.Name.ToLower().Contains("bestwestern"))
                 {
                     AddToFileBestwestern(hotel);
                 }
@@ -64,7 +64,15 @@ namespace HotelApi.Controllers
         private void AddToFileBestwestern(Hotel.Domain.Hotel hotel)
         {
             var path = _appConfiguration.ScandicHotels + $"/Bestwestern-{DateTime.Now:yyyy-MM-dd}.json";
-            var list = JArray.Parse(System.IO.File.ReadAllText(path)).ToObject<List<Hotel.Domain.Hotel>>();
+            List<Hotel.Domain.Hotel> list;
+            try
+            {
+                list = JArray.Parse(System.IO.File.ReadAllText(path)).ToObject<List<Hotel.Domain.Hotel>>();
+            }
+            catch (Exception e)
+            {
+                list = new List<Hotel.Domain.Hotel>();
+            }
             list.Add(hotel);
 
             using (var writer = System.IO.File.CreateText(path))
