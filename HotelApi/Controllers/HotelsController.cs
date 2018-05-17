@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Hotel.Infrastructure.Parser;
 using Hotel.Infrastructure.Repository;
 using Microsoft.AspNetCore.Mvc;
